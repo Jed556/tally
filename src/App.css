@@ -1,38 +1,485 @@
+/* Respect user's preference for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
 .App {
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/* Remove any default list styling */
+ul,
+ol,
+li {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+/* Ensure MUI components don't inherit unwanted list styles */
+.MuiListItem-root {
+  list-style: none !important;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+/* View container with smooth transitions */
+.view-container {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 1;
 }
 
-.App-link {
-  color: #61dafb;
+/* Counter card animations with staggered effects */
+.counter-card {
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: center;
+  will-change: transform;
 }
 
-@keyframes App-logo-spin {
+/* Fade in animation for new counters */
+.counter-card.fade-in {
+  animation: fadeInCard 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes fadeInCard {
   from {
-    transform: rotate(0deg);
+    opacity: 0;
+    transform: scale(0.8) translateY(20px);
   }
+
   to {
-    transform: rotate(360deg);
+    opacity: 1;
+    transform: scale(1) translateY(0);
   }
+}
+
+/* Grid layout transitions */
+.grid-container {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  /* Ensure stable initial layout */
+  opacity: 1;
+  transform: none;
+}
+
+/* Enhanced counter content transitions */
+.counter-content {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Smooth layout shifts */
+.view-container * {
+  transition: margin 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    padding 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Drag and drop visual feedback with enhanced animations */
+.sortable-item {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: center;
+  touch-action: none;
+  position: relative;
+  z-index: 1;
+}
+
+.sortable-item:hover {
+  z-index: 2;
+}
+
+/* Grid view specific styles */
+.view-container .sortable-item:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* List view specific styles */
+.view-container .sortable-item.list-item:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.sortable-item.dragging {
+  opacity: 0.9;
+  transform: rotate(3deg) scale(1.05);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+  z-index: 9999 !important;
+  animation: dragPulse 0.6s ease-in-out infinite alternate;
+  position: relative;
+}
+
+/* Drag handle specific styles */
+.drag-handle {
+  touch-action: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* Enhanced view transition animations */
+.view-container {
+  opacity: 1;
+}
+
+/* Simple entrance animation for new counters only */
+.counter-card.entering {
+  animation: cardEntrance 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes cardEntrance {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Custom scrollbar for better UX */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+}
+
+/* CSS Variables for theming */
+:root {
+  --scrollbar-track: #f1f1f1;
+  --scrollbar-thumb: #c1c1c1;
+  --scrollbar-thumb-hover: #a8a8a8;
+}
+
+[data-theme="dark"] {
+  --scrollbar-track: #2a2a2a;
+  --scrollbar-thumb: #555;
+  --scrollbar-thumb-hover: #777;
+}
+
+/* Enhanced animations for counter changes */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes bounce {
+
+  0%,
+  20%,
+  53%,
+  80%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  40%,
+  43% {
+    transform: translate3d(0, -8px, 0);
+  }
+
+  70% {
+    transform: translate3d(0, -4px, 0);
+  }
+
+  90% {
+    transform: translate3d(0, -2px, 0);
+  }
+}
+
+@keyframes dragPulse {
+  0% {
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+  }
+
+  100% {
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
+  }
+}
+
+@keyframes countUpdate {
+  0% {
+    transform: scale(1);
+    color: inherit;
+  }
+
+  50% {
+    transform: scale(1.2);
+    color: #4CAF50;
+  }
+
+  100% {
+    transform: scale(1);
+    color: inherit;
+  }
+}
+
+@keyframes sparkle {
+
+  0%,
+  100% {
+    opacity: 0;
+    transform: scale(0);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.counter-pulse {
+  animation: pulse 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.counter-slide-in {
+  animation: slideIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.counter-bounce {
+  animation: bounce 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.count-update {
+  animation: countUpdate 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.theme-transition {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Improved editing states */
+.editing-field {
+  animation: fadeIn 0.3s ease-in;
+}
+
+.editing-highlight {
+  box-shadow: 0 0 0 2px #2196F3, 0 0 20px rgba(33, 150, 243, 0.3);
+  animation: pulse 0.6s ease-in-out;
+}
+
+/* Focus styles for better accessibility */
+.MuiTextField-root .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-width: 2px;
+}
+
+/* Button hover effects */
+.MuiIconButton-root {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.MuiIconButton-root:hover {
+  transform: scale(1.15);
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.MuiIconButton-root:active {
+  transform: scale(0.95);
+}
+
+/* Ripple effect for buttons */
+.MuiIconButton-root::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transition: width 0.6s, height 0.6s, top 0.6s, left 0.6s;
+  transform: translate(-50%, -50%);
+}
+
+.MuiIconButton-root:active::before {
+  width: 50px;
+  height: 50px;
+}
+
+/* Fab button enhanced animations */
+.MuiFab-root {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.MuiFab-root:hover {
+  transform: scale(1.1);
+  box-shadow: 0 8px 25px rgba(25, 118, 210, 0.4);
+}
+
+.MuiFab-root:active {
+  transform: scale(1.05);
+}
+
+/* App Bar animations */
+.MuiAppBar-root {
+  backdrop-filter: blur(10px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Dialog animations */
+.MuiDialog-paper {
+  animation: slideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Chip animations */
+.MuiChip-root {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.MuiChip-root:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.MuiChip-root:active {
+  animation: countUpdate 0.3s ease-out;
+}
+
+/* Paper and Card enhancements */
+.MuiPaper-root,
+.MuiCard-root {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid transparent;
+}
+
+.MuiCard-root:hover {
+  border-color: rgba(25, 118, 210, 0.2);
+}
+
+/* Success and error state animations */
+@keyframes successPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7);
+  }
+
+  70% {
+    box-shadow: 0 0 0 10px rgba(76, 175, 80, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(76, 175, 80, 0);
+  }
+}
+
+@keyframes errorShake {
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    transform: translateX(-3px);
+  }
+
+  20%,
+  40%,
+  60%,
+  80% {
+    transform: translateX(3px);
+  }
+}
+
+.success-state {
+  animation: successPulse 0.8s ease-out;
+}
+
+.error-state {
+  animation: errorShake 0.6s ease-in-out;
+}
+
+/* View mode toggle animation */
+.view-toggle-enter {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Loading states */
+@keyframes shimmer {
+  0% {
+    background-position: -200px 0;
+  }
+
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+.shimmer-loading {
+  background: linear-gradient(90deg,
+      #f0f0f0 25%,
+      #e0e0e0 50%,
+      #f0f0f0 75%);
+  background-size: 200px 100%;
+  animation: shimmer 1.5s infinite;
 }
